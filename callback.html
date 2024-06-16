@@ -24,8 +24,12 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    // Redirige de vuelta a la aplicación con el token de acceso recibido
-                    window.location.href = `https://antonyzanga.github.io/AltoVoltajeRunningTeam/?access_token=${data.access_token}`;
+                    if (data.access_token) {
+                        // Redirige de vuelta a la aplicación con el token de acceso recibido
+                        window.location.href = `https://antonyzanga.github.io/AltoVoltajeRunningTeam/?access_token=${data.access_token}`;
+                    } else {
+                        console.error('No access token received');
+                    }
                 })
                 .catch(error => console.error('Error:', error));
             } else {
