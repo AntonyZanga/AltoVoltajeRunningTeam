@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alto Voltaje Running Team</title>
+    <script>
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            if (code) {
+                window.location.href = `https://antonyzanga.github.io/AltoVoltajeRunningTeam/?code=${code}`;
+            }
+        };
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Redirigiendo a Alto Voltaje Running Team</h1>
+    </header>
+    <main>
+        <p>Esta es la página oficial de mi aplicación. Aquí puedes encontrar información sobre cómo utilizarla con Strava.</p>
+    </main>
+    <footer>
+        <p>&copy; 2024 Mi Aplicación. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
