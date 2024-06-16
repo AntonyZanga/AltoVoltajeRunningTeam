@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callback</title>
+    <script>
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            if (code) {
+                fetch('https://www.strava.com/oauth/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        client_id: 'YOUR_CLIENT_ID',
+                        client_secret: 'YOUR_CLIENT_SECRET',
+                        code: code,
+                        grant_type: 'authorization_code'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Aquí puedes manejar el token de acceso recibido
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Callback Page</h1>
+    <p>Handling Strava OAuth callback...</p>
+</body>
+</html>
