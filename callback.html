@@ -24,9 +24,12 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    // Aquí puedes manejar el token de acceso recibido
+                    // Redirige de vuelta a la aplicación con el token de acceso recibido
+                    window.location.href = `https://antonyzanga.github.io/AltoVoltajeRunningTeam/?access_token=${data.access_token}`;
                 })
                 .catch(error => console.error('Error:', error));
+            } else {
+                console.error('No code found in URL');
             }
         };
     </script>
