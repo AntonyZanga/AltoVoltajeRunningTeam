@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.myapp.altovoltajerunningteam",
+      "sha256_cert_fingerprints": [
+        "0C:9F:E2:A6:65:84:B8:75:84:E4:F5:33:40:D6:55:EB:D9:3F:70:AA:0C:A7:DC:D9:97:45:2D:5E:8A:E6:21:D1"
+      ]
+    }
+  }
+]
