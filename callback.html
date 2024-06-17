@@ -1,45 +1,22 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Callback</title>
-    <script>
+    <title>Strava Redirect</title>
+    <script type="text/javascript">
         window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const code = params.get('code');
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
             if (code) {
-                fetch('https://www.strava.com/oauth/token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        client_id: '127124',
-                        client_secret: '50825ee5414cc703024485e972996e8a1fd8131b',
-                        code: code,
-                        grant_type: 'authorization_code'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.access_token) {
-                        // Redirige de vuelta a la aplicación con el token de acceso recibido
-                        window.location.href = `https://antonyzanga.github.io/AltoVoltajeRunningTeam/?access_token=${data.access_token}`;
-                    } else {
-                        console.error('No access token received');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+                window.location.href = `myapp://callback?code=${code}`;
             } else {
-                console.error('No code found in URL');
+                // Handle error
+                document.body.innerHTML = "Error: no authorization code found.";
             }
-        };
+        }
     </script>
 </head>
 <body>
-    <h1>Callback Page</h1>
-    <p>Handling Strava OAuth callback...</p>
+    <p>Redirigiendo...</p>
 </body>
 </html>
+
