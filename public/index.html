@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alto Voltaje Running Team</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc, 
+            getDocs, 
+            getDoc, 
+            setDoc, 
+            updateDoc, 
+            addDoc,
+            deleteDoc,
+            query,
+            where,
+            orderBy,
+            limit
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            GoogleAuthProvider,
+            signInWithPopup
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_xBPzBxpaW9-79NyrBZMehox35lMdwxo",
+            authDomain: "alto-voltaje-running-team.firebaseapp.com",
+            projectId: "alto-voltaje-running-team",
+            storageBucket: "alto-voltaje-running-team.firebasestorage.app",
+            messagingSenderId: "157154969817",
+            appId: "1:157154969817:web:3fc5f63a1d2310456156c8",
+            measurementId: "G-9VYXX6X598"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const analytics = getAnalytics(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Configurar el proveedor de Google
+        googleProvider.setCustomParameters({
+            prompt: 'select_account'
+        });
+
+        // Make variables globally available
+        window.db = db;
+        window.auth = auth;
+        window.analytics = analytics;
+        window.googleProvider = googleProvider;
+        window.signInWithPopup = signInWithPopup;
+        
+        // Firestore functions
+        window.collection = collection;
+        window.doc = doc;
+        window.getDocs = getDocs;
+        window.getDoc = getDoc;
+        window.setDoc = setDoc;
+        window.updateDoc = updateDoc;
+        window.addDoc = addDoc;
+        window.deleteDoc = deleteDoc;
+        window.query = query;
+        window.where = where;
+        window.orderBy = orderBy;
+        window.limit = limit;
+        
+        // Auth functions
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signOut = signOut;
+        window.onAuthStateChanged = onAuthStateChanged;
+    </script>
+    <!-- Strava SDK -->
+    <script src="https://www.strava.com/oauth/authorize?client_id=127124&response_type=code&redirect_uri=https://antonyzanga.github.io/AltoVoltajeRunningTeam/&approval_prompt=force&scope=read,activity:read_all,activity:read"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="assets/iconoaltovoltaje.png" alt="Alto Voltaje" class="logo-image">
+                <h1>Alto Voltaje Running Team</h1>
+            </div>
+            <nav>
+                <div class="nav-container">
+                    <div class="profile-container">
+                        <img id="user-profile-icon" class="profile-icon" src="" alt="Profile">
+                        <span id="user-name" class="user-name"></span>
+                    </div>
+                    <a href="#" id="home-link" class="nav-item">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">Inicio</span>
+                    </a>
+                    <a href="#" id="messages-link" class="nav-item admin-only" style="display: none;">
+                        <span class="nav-icon">📝</span>
+                        <span class="nav-text">Enviar Plan</span>
+                    </a>
+                    <a href="#" id="login-link" class="nav-item">
+                        <span class="nav-icon">🔒</span>
+                        <span class="nav-text">Cerrar Sesión</span>
+                    </a>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section id="login-section" class="active">
+                <div class="login-container">
+                    <div class="login-box">
+                        <h2>Iniciar Sesión</h2>
+                        <form id="login-form">
+                            <div class="form-group">
+                                <input type="email" id="email" placeholder="Correo electrónico" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="password" placeholder="Contraseña" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Iniciar Sesión</button>
+                        </form>
+                        <div class="divider">
+                            <span>o</span>
+                        </div>
+                        <button id="google-login" class="btn-google">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                            Continuar con Google
+                        </button>
+                        <p class="register-link">¿No tienes cuenta? <a href="#" id="show-register">Regístrate aquí</a></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="register-section" class="hidden">
+                <div class="register-container">
+                    <div class="register-box">
+                        <h2>Registrarse</h2>
+                        <form id="register-form">
+                            <div class="form-group">
+                                <input type="text" id="register-name" placeholder="Nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="register-email" placeholder="Correo electrónico" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="register-password" placeholder="Contraseña" required>
+                            </div>
+                            <div class="form-group">
+                                <select id="register-level" required>
+                                    <option value="">Seleccionar Nivel</option>
+                                    <option value="Principiante">Principiante</option>
+                                    <option value="Intermedio">Intermedio</option>
+                                    <option value="Avanzado">Avanzado</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary">Registrarse</button>
+                        </form>
+                        <p class="login-link">¿Ya tienes cuenta? <a href="#" id="show-login">Inicia sesión aquí</a></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="home-section" class="hidden">
+                <!-- Plan Semanal para usuarios no admin -->
+                <div id="weekly-plan" class="hidden">
+                    <h2>Plan Semanal</h2>
+                    <div id="current-week-plan" class="message-card">
+                        <div class="message-title">Cargando plan semanal...</div>
+                        <div class="message-content"></div>
+                        <div class="message-date"></div>
+                    </div>
+                </div>
+
+                <div class="strava-section">
+                    <div class="strava-header">
+                        <h2>Actividades de Strava</h2>
+                        <button id="strava-connect" class="strava-button">
+                            <img src="assets/iconostrava.png" alt="Strava" class="strava-icon">
+                            Conectar con Strava
+                        </button>
+                    </div>
+                    <div class="strava-activities">
+                        <div class="recent-activities">
+                            <h3>Últimas Actividades</h3>
+                            <div id="activities-list" class="activities-grid"></div>
+                        </div>
+                        <div class="strava-stats">
+                            <h3>Estadísticas</h3>
+                            <div id="strava-stats" class="stats-grid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strava-section">
+                    <div class="strava-header">
+                        <h2>Mejores Tiempos</h2>
+                    </div>
+                    <div class="strava-activities">
+                        <div class="best-times">
+                            <div id="best-times-list" class="best-times-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="events-section" class="hidden">
+                <h2>Eventos</h2>
+                <div id="events-list"></div>
+                <div id="add-event-form" class="hidden">
+                    <form id="event-form">
+                        <input type="text" id="event-title" placeholder="Título" required>
+                        <input type="date" id="event-date" required>
+                        <input type="text" id="event-location" placeholder="Ubicación" required>
+                        <textarea id="event-description" placeholder="Descripción" required></textarea>
+                        <button type="submit">Crear Evento</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="members-section" class="hidden">
+                <h2>Miembros</h2>
+                <div id="members-list"></div>
+                <div id="add-member-form" class="hidden">
+                    <form id="member-form">
+                        <input type="text" id="member-name" placeholder="Nombre" required>
+                        <input type="number" id="member-age" placeholder="Edad" required>
+                        <select id="member-gender" required>
+                            <option value="">Seleccionar Género</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>
+                        <select id="member-level" required>
+                            <option value="">Seleccionar Nivel</option>
+                            <option value="Principiante">Principiante</option>
+                            <option value="Intermedio">Intermedio</option>
+                            <option value="Avanzado">Avanzado</option>
+                        </select>
+                        <button type="submit">Agregar Miembro</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="messages-section" class="hidden">
+                <h2>Enviar Plan Semanal</h2>
+                <div class="date-selector">
+                    <div class="form-group">
+                        <label for="week-start">Seleccionar Lunes:</label>
+                        <input type="date" id="week-start" class="date-input">
+                    </div>
+                </div>
+                <div class="message-form">
+                    <div class="message-input-container">
+                        <textarea id="message-text" placeholder="Escribe tu mensaje aquí..."></textarea>
+                    </div>
+                    <div class="message-actions">
+                        <button id="send-message" class="btn-primary">Enviar Plan</button>
+                        <button id="copy-message" class="btn-secondary">Copiar Plan</button>
+                    </div>
+                </div>
+                <div id="users-list" class="users-grid"></div>
+                <div id="message-container">
+                    <div class="message-header">
+                        <h3>Mensajes para <span id="selected-user"></span></h3>
+                    </div>
+                    <div class="message-content">
+                        <div id="user-messages"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Alto Voltaje Running Team - Fundado el 2 de octubre de 2023</p>
+        </footer>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html> 

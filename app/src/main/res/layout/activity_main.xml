@@ -1,0 +1,126 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Toolbar principal -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/background_rounded"
+        android:elevation="4dp">
+
+        <ImageView
+            android:id="@+id/app_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_launcher"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="User Name"
+            android:textSize="18sp"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/strava_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_strava"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="end" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- ScrollView -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
+
+        <!-- RelativeLayout (contenedor principal) -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- RecyclerView para usuarios -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewUsers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="16dp"
+                android:paddingTop="8dp" />
+
+            <!-- EditText -->
+            <EditText
+                android:id="@+id/messageEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recyclerViewUsers"
+                android:layout_marginTop="16dp"
+                android:hint="Escribe tu mensaje aquí"
+                android:visibility="gone" />
+
+            <!-- Button -->
+            <Button
+                android:id="@+id/buttonSendMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/messageEditText"
+                android:layout_marginTop="16dp"
+                android:text="Enviar"
+                android:visibility="gone" />
+
+            <!-- TextView para el último mensaje recibido -->
+            <TextView
+                android:id="@+id/receivedMessageTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/buttonSendMessage"
+                android:layout_marginTop="16dp"
+                android:text="Último mensaje recibido"
+                android:visibility="gone" />
+
+            <!-- RecyclerView para mensajes -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewMessages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/receivedMessageTextView"
+                android:layout_marginTop="16dp" />
+
+            <LinearLayout
+                android:id="@+id/activitiesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recyclerViewMessages"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/weeklyBarChart"
+                android:layout_width="match_parent"
+                android:layout_below="@id/activitiesLayout"
+                android:padding="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_height="200dp"/>
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/monthlyBarChart"
+                android:layout_width="match_parent"
+                android:padding="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/weeklyBarChart"
+                android:layout_height="200dp"/>
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

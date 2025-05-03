@@ -1,0 +1,50 @@
+package com.android.altovoltajerunningteam
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+
+class UserAdapter(private val userList: List<User>, private val onUserClick: (User) -> Unit) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+
+    private val selectedUsers = mutableListOf<User>()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_user, parent, false)
+        return UserViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+        val user = userList[position]
+        holder.emailTextView.text = user.email
+        holder.checkBox.setOnCheckedChangeListener(null)
+        holder.checkBox.isChecked = selectedUsers.contains(user)
+
+        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedUsers.add(user)
+            } else {
+                selectedUsers.remove(user)
+            }
+        }
+
+        holder.itemView.setOnClickListener {
+            onUserClick(user)
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return userList.size
+    }
+
+    fun getSelectedUsers(): List<User> {
+        return selectedUsers
+    }
+
+    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val emailTextView: TextView = itemView.findViewById(R.id.emailTextView)
+        val checkBox: CheckBox = itemView.findViewById(R.id.checkBox)
+    }
+}

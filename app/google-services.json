@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "157154969817",
+    "project_id": "alto-voltaje-running-team",
+    "storage_bucket": "alto-voltaje-running-team.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157154969817:android:58a29313af5407c36156c8",
+        "android_client_info": {
+          "package_name": "com.android.altovoltajerunningteam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBrlNBJKjjvOa49pM8X5j2FrEySpVCBhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,43 @@
+# Credenciales y secretos
+id y cliente web google.txt
+*.jks
+keystore.jks
+
+# Archivos de configuración
+google-services.json
+
+# Dependencias
+node_modules/
+.gradle/
+build/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.idea/
+*.iml
+.vscode/
+
+# Archivos de compilación
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
