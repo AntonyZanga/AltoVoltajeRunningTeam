@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirección de Strava</title>
+    <title>Alto Voltaje Running Team</title>
     <script>
-        // Obtener el código de autorización de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        
-        // Redirigir a callback.html con el código
-        if (code) {
-            window.location.href = `callback.html?code=${code}`;
-        } else {
-            document.body.innerHTML = '<p style="text-align: center; margin-top: 20px;">No se recibió el código de autorización de Strava.</p>';
-        }
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            if (code) {
+                window.location.href = `myapp://callback?code=${code}`;
+            }
+        };
     </script>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+    <header>
+        <h1>Redirigiendo a Alto Voltaje Running Team</h1>
+    </header>
+    <main>
+        <p>Esta es la página oficial de mi aplicación. Aquí puedes encontrar información sobre cómo utilizarla con Strava.</p>
+    </main>
+    <footer>
+        <p>&copy; 2024 Mi Aplicación. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>
