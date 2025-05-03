@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Alto Voltaje Running Team</title>
     <script>
         window.onload = function() {
@@ -11,11 +13,20 @@
             
             if (code) {
                 // Intentar redirigir a la aplicación Android
-                window.location.href = `myapp://callback?code=${code}`;
+                const androidUrl = `myapp://callback?code=${code}`;
+                const webUrl = `https://alto-voltaje-running-team.web.app?strava_code=${code}`;
                 
-                // Si la redirección a Android falla, redirigir a la web después de un breve retraso
+                // Intentar abrir la app Android
+                window.location.href = androidUrl;
+                
+                // Si la redirección a Android falla, redirigir a la web
                 setTimeout(function() {
-                    window.location.replace(`https://alto-voltaje-running-team.web.app?strava_code=${code}`);
+                    if (document.hidden) {
+                        // Si la página está oculta (app abierta), no hacer nada
+                        return;
+                    }
+                    // Si la página sigue visible, redirigir a la web
+                    window.location.replace(webUrl);
                 }, 100);
             }
         };
