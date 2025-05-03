@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Alto Voltaje Running Team</title>
+    <title>Procesando Strava</title>
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -87,24 +87,13 @@
     <script type="module" src="app.js"></script>
     <script>
         function redirectToAndroidApp() {
-            // Check if user is on Android
             if (/Android/i.test(navigator.userAgent)) {
-                try {
-                    // Try to open the Android app with proper callback handling
-                    window.location.href = 'myapp://callback';
-                    
-                    // Set a timeout to check if the app was opened
-                    setTimeout(() => {
-                        if (!document.hidden) {
-                            // If we're still visible, the app wasn't opened
-                            window.location.href = 'https://alto-voltaje-running-team.web.app/';
-                        }
-                    }, 100);
-                } catch (e) {
-                    console.error('Error redirecting to app:', e);
-                    // Fallback to web version
-                    window.location.href = 'https://alto-voltaje-running-team.web.app/';
-                }
+                window.location.href = 'myapp://callback';
+                setTimeout(() => {
+                    if (!document.hidden) {
+                        window.location.href = 'https://alto-voltaje-running-team.web.app/';
+                    }
+                }, 100);
             }
         }
 
