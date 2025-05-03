@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Alto Voltaje Running Team</title>
+    <script>
+        function redirectToAndroidApp() {
+            // Check if user is on Android
+            if (/Android/i.test(navigator.userAgent)) {
+                try {
+                    // Try to open the Android app with proper callback handling
+                    window.location.href = 'myapp://callback';
+                    
+                    // Set a timeout to check if the app was opened
+                    setTimeout(() => {
+                        if (!document.hidden) {
+                            // If we're still visible, the app wasn't opened
+                            window.location.href = 'https://alto-voltaje-running-team.web.app/';
+                        }
+                    }, 100);
+                } catch (e) {
+                    console.error('Error redirecting to app:', e);
+                    // Fallback to web version
+                    window.location.href = 'https://alto-voltaje-running-team.web.app/';
+                }
+            }
+        }
+
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            if (code) {
+                processPendingStravaCode();
+            } else {
+                redirectToAndroidApp();
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+        header {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        main {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        footer {
+            margin-top: 40px;
+            font-size: 0.8em;
+            color: #666;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        p {
+            line-height: 1.6;
+            color: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Redirigiendo a Alto Voltaje Running Team</h1>
+    </header>
+    <main>
+        <p>Esta es la página oficial de mi aplicación. Aquí puedes encontrar información sobre cómo utilizarla con Strava.</p>
+    </main>
+    <footer>
+        <p>&copy; 2024 Alto Voltaje Running Team. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html> 
