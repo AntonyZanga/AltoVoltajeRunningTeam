@@ -1,77 +1,82 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Alto Voltaje Running Team</title>
-    <script>
-        window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const code = params.get('code');
-            
-            if (code) {
-                // Primero intentar redirigir a la app Android
-                const androidUrl = `myapp://callback?code=${code}`;
-                window.location.href = androidUrl;
-                
-                // Si la app no está instalada, redirigir a la web después de un breve retraso
-                setTimeout(function() {
-                    if (!document.hidden) {
-                        // Si la página sigue visible (app no instalada), redirigir a la web
-                        window.location.href = `https://alto-voltaje-running-team.web.app?code=${code}`;
-                    }
-                }, 100);
-            } else {
-                // Si no hay código, redirigir a la página principal
-                window.location.href = 'https://alto-voltaje-running-team.web.app';
-            }
-        };
-    </script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-            background-color: #f5f5f5;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Alto Voltaje Running Team</title>
+
+  <!-- Firebase SDK (necesario para processPendingStravaCode) -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
+
+  <!-- Tu lógica principal -->
+  <script type="module" src="app.js"></script>
+
+  <script>
+    async function handleStravaCode(code) {
+      try {
+        // intercambia el código por token y guarda en Firestore
+        await processPendingStravaCode(code);
+      } catch (e) {
+        console.error('Error procesando Strava code en web:', e);
+      }
+      // luego intentar abrir la app Android
+      const androidUrl = `myapp://callback?code=${encodeURIComponent(code)}`;
+      window.location.href = androidUrl;
+      // si no abre, después de 100 ms ir a la web
+      setTimeout(() => {
+        if (!document.hidden) {
+          window.location.href = `https://alto-voltaje-running-team.web.app?code=${encodeURIComponent(code)}`;
         }
-        header {
-            margin-bottom: 20px;
-            color: #333;
-        }
-        main {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        footer {
-            margin-top: 40px;
-            font-size: 0.8em;
-            color: #666;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        p {
-            line-height: 1.6;
-            color: #34495e;
-        }
-    </style>
+      }, 100);
+    }
+
+    window.onload = function() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+
+      if (code) {
+        // primero manejamos el código en la web, luego Android
+        handleStravaCode(code);
+      } else {
+        // sin código, ir al home de tu web-app
+        window.location.href = 'https://alto-voltaje-running-team.web.app';
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 20px;
+      text-align: center;
+      background-color: #f5f5f5;
+    }
+    header { margin-bottom: 20px; color: #333; }
+    main {
+      max-width: 600px; margin: 0 auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    footer { margin-top: 40px; font-size: 0.8em; color: #666; }
+    h1 { color: #2c3e50; }
+    p { line-height: 1.6; color: #34495e; }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Redirigiendo a Alto Voltaje Running Team</h1>
-    </header>
-    <main>
-        <p>Esta es la página oficial de mi aplicación. Aquí puedes encontrar información sobre cómo utilizarla con Strava.</p>
-    </main>
-    <footer>
-        <p>&copy; 2024 Alto Voltaje Running Team. Todos los derechos reservados.</p>
-    </footer>
+  <header>
+    <h1>Redirigiendo a Alto Voltaje Running Team</h1>
+  </header>
+  <main>
+    <p>Esta es la página oficial de mi aplicación. Aquí puedes encontrar información sobre cómo utilizarla con Strava.</p>
+  </main>
+  <footer>
+    <p>&copy; 2024 Alto Voltaje Running Team. Todos los derechos reservados.</p>
+  </footer>
 </body>
-</html> 
+</html>
