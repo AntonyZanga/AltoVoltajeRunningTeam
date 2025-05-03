@@ -6,6 +6,85 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Alto Voltaje Running Team</title>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc, 
+            getDocs, 
+            getDoc, 
+            setDoc, 
+            updateDoc, 
+            addDoc,
+            deleteDoc,
+            query,
+            where,
+            orderBy,
+            limit
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            GoogleAuthProvider,
+            signInWithPopup
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_xBPzBxpaW9-79NyrBZMehox35lMdwxo",
+            authDomain: "alto-voltaje-running-team.firebaseapp.com",
+            projectId: "alto-voltaje-running-team",
+            storageBucket: "alto-voltaje-running-team.firebasestorage.app",
+            messagingSenderId: "157154969817",
+            appId: "1:157154969817:web:3fc5f63a1d2310456156c8",
+            measurementId: "G-9VYXX6X598"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const analytics = getAnalytics(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Configurar el proveedor de Google
+        googleProvider.setCustomParameters({
+            prompt: 'select_account'
+        });
+
+        // Make variables globally available
+        window.db = db;
+        window.auth = auth;
+        window.analytics = analytics;
+        window.googleProvider = googleProvider;
+        window.signInWithPopup = signInWithPopup;
+        
+        // Firestore functions
+        window.collection = collection;
+        window.doc = doc;
+        window.getDocs = getDocs;
+        window.getDoc = getDoc;
+        window.setDoc = setDoc;
+        window.updateDoc = updateDoc;
+        window.addDoc = addDoc;
+        window.deleteDoc = deleteDoc;
+        window.query = query;
+        window.where = where;
+        window.orderBy = orderBy;
+        window.limit = limit;
+        
+        // Auth functions
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signOut = signOut;
+        window.onAuthStateChanged = onAuthStateChanged;
+    </script>
+    <script type="module" src="app.js"></script>
     <script>
         function redirectToAndroidApp() {
             // Check if user is on Android
@@ -30,7 +109,7 @@
         }
 
         window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
+            const params = new URLSearchParams(location.search);
             const code = params.get('code');
             if (code) {
                 processPendingStravaCode();
