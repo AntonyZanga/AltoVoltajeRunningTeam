@@ -7,7 +7,17 @@
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
             if (code) {
-                window.location.href = `myapp://callback?code=${code}`;
+                // Primero intentar redirigir a la app Android
+                const androidUrl = `myapp://callback?code=${code}`;
+                window.location.href = androidUrl;
+                
+                // Si la app no está instalada, redirigir a la web después de un breve retraso
+                setTimeout(function() {
+                    if (!document.hidden) {
+                        // Si la página sigue visible (app no instalada), redirigir a la web
+                        window.location.href = `https://alto-voltaje-running-team.web.app?strava_code=${code}`;
+                    }
+                }, 100);
             } else {
                 // Handle error
                 document.body.innerHTML = "Error: no authorization code found.";
