@@ -8,8 +8,15 @@
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
+            
             if (code) {
+                // Intentar redirigir a la aplicación Android
                 window.location.href = `myapp://callback?code=${code}`;
+                
+                // Si la redirección a Android falla, redirigir a la web después de un breve retraso
+                setTimeout(function() {
+                    window.location.href = `https://alto-voltaje-running-team.web.app?strava_code=${code}`;
+                }, 1000);
             }
         };
     </script>
@@ -23,7 +30,7 @@
         <p>Esta es la página oficial de mi aplicación. Aquí puedes encontrar información sobre cómo utilizarla con Strava.</p>
     </main>
     <footer>
-        <p>&copy; 2024 Mi Aplicación. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Alto Voltaje Running Team. Todos los derechos reservados.</p>
     </footer>
 </body>
-</html>
+</html> 
