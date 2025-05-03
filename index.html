@@ -12,22 +12,20 @@
             const code = params.get('code');
             
             if (code) {
-                // Intentar redirigir a la aplicación Android
+                // Primero intentar redirigir a la app Android
                 const androidUrl = `myapp://callback?code=${code}`;
-                const webUrl = `https://alto-voltaje-running-team.web.app?strava_code=${code}`;
-                
-                // Intentar abrir la app Android
                 window.location.href = androidUrl;
                 
-                // Si la redirección a Android falla, redirigir a la web
+                // Si la app no está instalada, redirigir a la web después de un breve retraso
                 setTimeout(function() {
-                    if (document.hidden) {
-                        // Si la página está oculta (app abierta), no hacer nada
-                        return;
+                    if (!document.hidden) {
+                        // Si la página sigue visible (app no instalada), redirigir a la web
+                        window.location.href = `https://alto-voltaje-running-team.web.app?strava_code=${code}`;
                     }
-                    // Si la página sigue visible, redirigir a la web
-                    window.location.replace(webUrl);
                 }, 100);
+            } else {
+                // Si no hay código, redirigir a la página principal
+                window.location.href = 'https://alto-voltaje-running-team.web.app';
             }
         };
     </script>
